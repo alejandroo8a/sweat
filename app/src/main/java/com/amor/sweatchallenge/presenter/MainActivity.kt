@@ -1,7 +1,8 @@
-package com.amor.sweatchallenge
+package com.amor.sweatchallenge.presenter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.amor.sweatchallenge.R
 
 class MainActivity : AppCompatActivity() {
 
