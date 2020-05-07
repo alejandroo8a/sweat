@@ -5,6 +5,7 @@ buildscript {
     ext.koin_version = '2.1.4'
     ext.koin_architecture_version = "0.9.3"
     ext.retrofit_version = '2.6.0'
+    ext.rx_adapter = '2.5.0'
     ext.moshi_version = '1.8.0'
     ext.converter_moshi_version = '2.4.0'
     ext.login_interceptor = '4.2.1'

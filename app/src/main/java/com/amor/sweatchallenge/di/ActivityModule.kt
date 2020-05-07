@@ -1,14 +1,18 @@
 package com.amor.sweatchallenge.di
 
+import com.amor.sweatchallenge.presentation.home.HomeViewModel
 import org.koin.dsl.module
+import org.koin.android.viewmodel.dsl.viewModel
 
 val ActivityModule = module {
 
-    // PostsViewModel ViewModel
-//    viewModel { PostsViewModel(get()) }
-//
-//    single { createGetPostsUseCase(get(), createApiErrorHandle()) }
-//
-//    // single instance of PostsRepository
-//    single { createPostRepository(get()) }
+    // HomeViewModel ViewModel
+    viewModel { HomeViewModel(get()) }
+
+    single { createHomeRepository(get()) }
+
+    single { createHomeClient(get(), createHomeMapper()) }
+
+    single { createPaginationUtil() }
+
 }
