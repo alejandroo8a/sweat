@@ -9,3 +9,11 @@ enum class NetworkResult {
     GENERIC_ERROR,
     SERVER_ERROR
 }
+
+interface RoomMapper<out T : Any> {
+    fun mapToRoomEntity(): T
+}
+
+interface DomainMapper<T : Any> {
+    fun mapToDomainModel(): T
+}

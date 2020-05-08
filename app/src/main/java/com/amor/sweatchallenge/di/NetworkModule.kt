@@ -1,9 +1,16 @@
 package com.amor.sweatchallenge.di
 
+import android.content.Context
+import androidx.room.Room
 import com.amor.sweatchallenge.BuildConfig
 import com.amor.sweatchallenge.data.home.DefaultHomeRepository
 import com.amor.sweatchallenge.data.home.HomeMapper
 import com.amor.sweatchallenge.data.home.HomeRepository
+import com.amor.sweatchallenge.database.APP_DATABASE_NAME
+import com.amor.sweatchallenge.database.AppDatabase
+import com.amor.sweatchallenge.database.user.DefaultUserDataSource
+import com.amor.sweatchallenge.database.user.UserDao
+import com.amor.sweatchallenge.database.user.UserDataSource
 import com.amor.sweatchallenge.network.ApiService
 import com.amor.sweatchallenge.network.home.HomeClient
 import com.amor.sweatchallenge.util.pagination.PaginationUtil
@@ -16,6 +23,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
+
 val NetworkModule = module {
 
     single { createService(get()) }
@@ -25,6 +33,12 @@ val NetworkModule = module {
     single { createOkHttpClient() }
 
     single { createMoshi() }
+
+    single { createUserDataSource(get()) }
+
+    single { createAppDatabase(get()) }
+
+    single { createUserDao(get()) }
 }
 
 fun createOkHttpClient(): OkHttpClient {
@@ -61,10 +75,28 @@ fun createHomeClient(apiService: ApiService, mapper: HomeMapper): HomeClient {
     return HomeClient(apiService, mapper)
 }
 
-fun createHomeRepository(client: HomeClient): HomeRepository {
-    return DefaultHomeRepository(client)
+fun createHomeRepository(
+    client: HomeClient,
+    userDataSource: UserDataSource,
+    mapper: HomeMapper
+): HomeRepository {
+    return DefaultHomeRepository(client, userDataSource, mapper)
 }
 
 fun createPaginationUtil(): PaginationUtil {
     return PaginationUtil()
+}
+
+fun createUserDataSource(userDao: UserDao): UserDataSource {
+    return DefaultUserDataSource(userDao)
+}
+
+fun createAppDatabase(context: Context): AppDatabase {
+    return Room.databaseBuilder(context, AppDatabase::class.java, APP_DATABASE_NAME)
+        .fallbackToDestructiveMigration()
+        .build()
+}
+
+fun createUserDao(appDatabase: AppDatabase): UserDao {
+    return appDatabase.userDao()
 }

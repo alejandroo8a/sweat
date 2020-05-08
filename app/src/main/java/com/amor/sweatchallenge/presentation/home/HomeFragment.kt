@@ -1,6 +1,7 @@
 package com.amor.sweatchallenge.presentation.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,8 +22,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: HomeViewModel by viewModel()
+
     lateinit var adapter: HomeAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
         setupAdapter()
         binding.progressBar.visibility = View.VISIBLE
         viewModel.showProfilesPictures(paginationUtil.currentPage)
+        viewModel.getUsers()
     }
 
     override fun loadItems() {
@@ -43,6 +45,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
 
     private fun addObservers() {
         viewModel.profilePicturesResult.observe(this, Observer (this::handleProfilePictureResult))
+        viewModel.userResult.observe(this, Observer (this::handleUserResult))
     }
 
     private fun handleProfilePictureResult(response: GenericData<ArrayList<ProfileData>>) {
@@ -53,6 +56,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
                 adapter.addProfileData(it)
             }
         }
+    }
+
+    private fun handleUserResult(userList: ArrayList<ProfileData>) {
+        Log.d("AQUI MERO", "Tengo estos elementos: ${userList.size}")
     }
 
 
