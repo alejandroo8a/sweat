@@ -1,7 +1,10 @@
 package com.amor.sweatchallenge.presentation.home
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +13,7 @@ import com.amor.sweatchallenge.data.GenericData
 import com.amor.sweatchallenge.data.ProfileData
 import com.amor.sweatchallenge.databinding.FragmentHomeBinding
 import com.amor.sweatchallenge.presentation.MainActivity
+import com.amor.sweatchallenge.util.hideKeyboard
 import com.amor.sweatchallenge.util.pagination.CallbackLoadMoreItems
 import com.amor.sweatchallenge.util.pagination.PaginationUtil
 import org.koin.android.ext.android.inject
@@ -27,6 +31,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
     lateinit var favoriteAdapter: FavoriteAdapter
     var isSetupFavoriteAdapter = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -36,6 +46,24 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
         binding.progressBar.visibility = View.VISIBLE
         viewModel.showProfilesPictures(paginationUtil.currentPage)
         viewModel.getUsers()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_home, menu)
+        val menuItem = menu.findItem(R.id.search)
+        val searchView = menuItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter.filter(newText)
+                paginationUtil.setLoading(true)
+                return false
+            }
+        })
     }
 
     override fun loadItems() {
@@ -96,6 +124,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
     }
 
     private fun clickOnProfile(profileData: ProfileData) {
+        hideKeyboard()
         (activity as MainActivity).addDetailFragment(profileData)
     }
 
