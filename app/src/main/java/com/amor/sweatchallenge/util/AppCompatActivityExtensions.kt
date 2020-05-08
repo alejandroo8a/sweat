@@ -14,18 +14,25 @@ import androidx.fragment.app.FragmentTransaction
  * performed by the `fragmentManager`.
  */
 fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment, frameId: Int) {
-    supportFragmentManager.transact {
-        replace(frameId, fragment)
-    }
+    replaceFragment(supportFragmentManager, fragment, frameId)
 }
 
-/**
- * Runs a FragmentTransaction, then calls commit().
- */
-private inline fun FragmentManager.transact(action: FragmentTransaction.() -> Unit) {
-    beginTransaction().apply {
-        action()
-    }.commit()
+fun AppCompatActivity.addFragmentInActivity(fragment: Fragment, frameId: Int) {
+    addFragment(supportFragmentManager, fragment, frameId)
+}
+
+private fun addFragment(supportFragmentManager: FragmentManager, fragment: Fragment, frameId: Int) {
+    val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+    fragmentTransaction.add(frameId, fragment, fragment.tag)
+    fragmentTransaction.addToBackStack(fragment::class.java.name)
+    fragmentTransaction.commit()
+}
+
+private fun replaceFragment(supportFragmentManager: FragmentManager, fragment: Fragment, frameId: Int) {
+    val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+    fragmentTransaction.replace(frameId, fragment, fragment.tag)
+    fragmentTransaction.addToBackStack(fragment::class.java.name)
+    fragmentTransaction.commit()
 }
 
 fun AppCompatActivity.launchActivity(cls: Class<*>?, extras: Bundle? = null) {

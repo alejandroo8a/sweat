@@ -16,8 +16,13 @@ class HomeMapper {
             profileList.add(
                 ProfileData(
                     profile.picture.thumbnail,
+                    profile.picture.large,
                     "${profile.name.first} ${profile.name.last}",
-                    profile.cell
+                    profile.phone,
+                    profile.email,
+                    "${profile.location.state}, ${profile.location.country}",
+                    profile.location.coordinates.latitude,
+                    profile.location.coordinates.longitude
                 )
             )
         }

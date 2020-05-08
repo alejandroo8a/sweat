@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_home.view.*
 
 class HomeAdapter(
-private val listener: () -> Unit
+private val listener: (profile: ProfileData) -> Unit
 ) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
     private val profilePictureList = arrayListOf<ProfileData>()
@@ -33,11 +33,11 @@ private val listener: () -> Unit
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(profileData: ProfileData, listener: () -> Unit) = with(itemView) {
+        fun bind(profileData: ProfileData, listener: (profile: ProfileData) -> Unit) = with(itemView) {
             Picasso.get().load(profileData.thumbnail).placeholder(R.drawable.ic_placeholder).into(profilePicture)
             titleText.text = profileData.name
-            subtitleText.text = profileData.cell
-            setOnClickListener { listener() }
+            subtitleText.text = profileData.phone
+            setOnClickListener { listener(profileData) }
         }
     }
 }

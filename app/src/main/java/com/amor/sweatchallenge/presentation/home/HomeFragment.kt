@@ -2,15 +2,14 @@ package com.amor.sweatchallenge.presentation.home
 
 import android.os.Bundle
 import android.view.View
-import android.widget.GridLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amor.sweatchallenge.R
 import com.amor.sweatchallenge.data.GenericData
 import com.amor.sweatchallenge.data.ProfileData
 import com.amor.sweatchallenge.databinding.FragmentHomeBinding
+import com.amor.sweatchallenge.presentation.MainActivity
 import com.amor.sweatchallenge.util.pagination.CallbackLoadMoreItems
 import com.amor.sweatchallenge.util.pagination.PaginationUtil
 import org.koin.android.ext.android.inject
@@ -18,7 +17,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
 
-    val paginationUtil: PaginationUtil by inject()
+    private val paginationUtil: PaginationUtil by inject()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -33,6 +32,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
         addObservers()
         setupAdapter()
         binding.progressBar.visibility = View.VISIBLE
+        viewModel.showProfilesPictures(paginationUtil.currentPage)
+    }
+
+    override fun loadItems() {
+        paginationUtil.setLoading(true)
+        paginationUtil.currentPage = paginationUtil.currentPage + PaginationUtil.DEFAULT_PAGE
         viewModel.showProfilesPictures(paginationUtil.currentPage)
     }
 
@@ -52,9 +57,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
 
 
     private fun setupAdapter() {
-        adapter = HomeAdapter {
-
-        }
+        adapter = HomeAdapter(this::clickOnProfile)
         val linearLayoutManager = LinearLayoutManager(context)
         binding.profileRecyclerView.layoutManager = linearLayoutManager
         binding.profileRecyclerView.adapter = adapter
@@ -68,10 +71,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
         paginationUtil.isFirstPage = true
     }
 
-    override fun loadItems() {
-        paginationUtil.setLoading(true)
-        paginationUtil.currentPage = paginationUtil.currentPage + PaginationUtil.DEFAULT_PAGE
-        viewModel.showProfilesPictures(paginationUtil.currentPage)
-    }
+    private fun clickOnProfile(profileData: ProfileData) {
+        (activity as MainActivity).addDetailFragment(profileData)
 
+    }
 }
