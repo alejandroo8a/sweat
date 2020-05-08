@@ -26,6 +26,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         setupView()
         addListeners()
         isFavorite = profileData.isFavorite
+        setRightFavoriteIcon()
     }
 
     private fun setupView() {
@@ -48,6 +49,15 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             viewModel.addFavoriteUser(profileData)
         } else {
             viewModel.deleteFavoriteUser(profileData.userId)
+        }
+        setRightFavoriteIcon()
+    }
+
+    private fun setRightFavoriteIcon() {
+        if (isFavorite) {
+            binding.favoriteFab.setImageResource(R.drawable.ic_favorite_fill)
+        } else {
+            binding.favoriteFab.setImageResource(R.drawable.ic_favorite_empty)
         }
     }
 
