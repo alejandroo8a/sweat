@@ -1,7 +1,6 @@
 package com.amor.sweatchallenge.presentation.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,6 +24,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
     private val viewModel: HomeViewModel by viewModel()
 
     lateinit var adapter: HomeAdapter
+    lateinit var favoriteAdapter: FavoriteAdapter
+    var isSetupFavoriteAdapter = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,9 +60,17 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
     }
 
     private fun handleUserResult(userList: ArrayList<ProfileData>) {
-        Log.d("AQUI MERO", "Tengo estos elementos: ${userList.size}")
+        if(userList.isNotEmpty()) {
+            showFavorites()
+            if (isSetupFavoriteAdapter) {
+                favoriteAdapter.addFavoriteData(userList)
+            } else {
+                setupFavoriteAdapter(userList)
+            }
+        } else {
+            hideFavorites()
+        }
     }
-
 
     private fun setupAdapter() {
         adapter = HomeAdapter(this::clickOnProfile)
@@ -69,6 +78,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
         binding.profileRecyclerView.layoutManager = linearLayoutManager
         binding.profileRecyclerView.adapter = adapter
         setupPagination(linearLayoutManager)
+    }
+
+    private fun setupFavoriteAdapter(userList: ArrayList<ProfileData>) {
+        favoriteAdapter =  FavoriteAdapter(this::clickOnProfile)
+        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.userRecyclerView.layoutManager = linearLayoutManager
+        binding.userRecyclerView.adapter = favoriteAdapter
+        favoriteAdapter.addFavoriteData(userList)
     }
 
     private fun setupPagination(linearLayoutManager: LinearLayoutManager) {
@@ -80,6 +97,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
 
     private fun clickOnProfile(profileData: ProfileData) {
         (activity as MainActivity).addDetailFragment(profileData)
+    }
 
+    private fun showFavorites() {
+        binding.titleText.visibility = View.VISIBLE
+        binding.userRecyclerView.visibility = View.VISIBLE
+    }
+
+    private fun hideFavorites() {
+        binding.titleText.visibility = View.GONE
+        binding.userRecyclerView.visibility = View.GONE
     }
 }

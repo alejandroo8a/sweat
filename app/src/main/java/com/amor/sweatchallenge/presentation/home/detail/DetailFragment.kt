@@ -25,6 +25,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         _binding = FragmentDetailBinding.bind(view)
         setupView()
         addListeners()
+        isFavorite = profileData.isFavorite
     }
 
     private fun setupView() {

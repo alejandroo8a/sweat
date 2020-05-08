@@ -26,7 +26,7 @@ data class ProfileData(
             location,
             latitude,
             longitude,
-            isFavorite
+            true
         )
     }
 
