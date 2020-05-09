@@ -6,7 +6,7 @@ import com.amor.sweatchallenge.R
 import com.amor.sweatchallenge.data.ProfileData
 import com.amor.sweatchallenge.presentation.home.HomeFragment
 import com.amor.sweatchallenge.presentation.home.detail.DetailFragment
-import com.amor.sweatchallenge.util.replaceFragmentInActivity
+import com.amor.sweatchallenge.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,19 +14,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        replaceFragmentInActivity(HomeFragment(), R.id.rootView)
+        addFragmentInActivity(HomeFragment(), R.id.rootView, HOME_FRAGMENT_TAG)
     }
 
     fun addDetailFragment(profileData: ProfileData) {
-        replaceFragmentInActivity(DetailFragment.newInstance(profileData), R.id.rootView)
+        addFragmentInActivity(DetailFragment.newInstance(profileData), R.id.rootView, DETAIL_FRAGMENT_TAG)
     }
 
     override fun onBackPressed() {
-        val count = supportFragmentManager.backStackEntryCount
-
-        if (count == 1) {
+        if(supportFragmentManager.backStackEntryCount == 1) {
             supportFragmentManager.popBackStack()
+            super.onBackPressed()
+        } else {
+            manageBackPressed()
         }
-        super.onBackPressed()
     }
 }

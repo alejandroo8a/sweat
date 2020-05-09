@@ -9,6 +9,7 @@
     <string name="detail_view_location">View location</string>
     <string name="home_favorites">Favorites</string>
     <string name="home_contacts">Contacts</string>
+    <string name="detail_profile">Detail profile</string>
 
     <string name="response_error_server">Error server</string>
     <string name="no_results">No results</string>
