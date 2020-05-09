@@ -149,6 +149,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems, St
                 if(adapter.itemCount == 0) {
                     viewModel.showProfilesPictures(paginationUtil.currentPage)
                     this.runOnUiThread {
+                        hideViewNoResult()
                         binding.progressBar.visibility = View.VISIBLE
                     }
                 }
