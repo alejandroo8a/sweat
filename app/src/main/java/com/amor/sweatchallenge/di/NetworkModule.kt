@@ -13,6 +13,7 @@ import com.amor.sweatchallenge.database.user.UserDao
 import com.amor.sweatchallenge.database.user.UserDataSource
 import com.amor.sweatchallenge.network.ApiService
 import com.amor.sweatchallenge.network.home.HomeClient
+import com.amor.sweatchallenge.util.SearchViewUtil
 import com.amor.sweatchallenge.util.pagination.PaginationUtil
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
@@ -22,7 +23,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
-
 
 val NetworkModule = module {
 
@@ -39,6 +39,8 @@ val NetworkModule = module {
     single { createAppDatabase(get()) }
 
     single { createUserDao(get()) }
+
+    single { createSearchViewUtil(get()) }
 }
 
 fun createOkHttpClient(): OkHttpClient {
@@ -99,4 +101,8 @@ fun createAppDatabase(context: Context): AppDatabase {
 
 fun createUserDao(appDatabase: AppDatabase): UserDao {
     return appDatabase.userDao()
+}
+
+fun createSearchViewUtil(paginationUtil: PaginationUtil): SearchViewUtil {
+    return SearchViewUtil(paginationUtil)
 }

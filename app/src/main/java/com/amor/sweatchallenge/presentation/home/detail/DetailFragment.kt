@@ -3,6 +3,7 @@ package com.amor.sweatchallenge.presentation.home.detail
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.amor.sweatchallenge.R
@@ -10,6 +11,7 @@ import com.amor.sweatchallenge.R
 import com.amor.sweatchallenge.data.ProfileData
 import com.amor.sweatchallenge.databinding.FragmentDetailBinding
 import com.amor.sweatchallenge.util.saveContact
+import com.amor.sweatchallenge.util.showSnackBar
 import com.squareup.picasso.Picasso
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -22,6 +24,12 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private lateinit var profileData: ProfileData
     private var isFavorite: Boolean = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -32,9 +40,20 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         setRightFavoriteIcon()
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.menu_detail, menu)
-//    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.menu_detail, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save -> {
+                saveContact(profileData.name)
+                true
+            }
+            else -> false
+        }
+    }
 
     private fun setupView() {
         binding.nameText.text = profileData.name
@@ -48,26 +67,15 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         binding.favoriteFab.setOnClickListener {
             handleIsFavorite()
         }
-
-        binding.callButton.setOnClickListener {
-            saveContact(profileData.name)
-        }
-
-//        binding.toolbar.setOnMenuItemClickListener { menuItem ->
-//            when(menuItem.itemId) {
-//                R.id.save -> {
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
     }
 
     private fun handleIsFavorite() {
         isFavorite = !isFavorite
         if (isFavorite) {
+            showSnackBar(R.string.user_added)
             viewModel.addFavoriteUser(profileData)
         } else {
+            showSnackBar(R.string.user_delete)
             viewModel.deleteFavoriteUser(profileData.userId)
         }
         setRightFavoriteIcon()

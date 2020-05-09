@@ -8,11 +8,15 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.amor.sweatchallenge.R
 import com.amor.sweatchallenge.data.ProfileData
+import com.amor.sweatchallenge.util.pagination.PaginationUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_home.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeAdapter(
-private val listener: (profile: ProfileData) -> Unit
+    private val paginationUtil: PaginationUtil,
+    private val listener: (profile: ProfileData) -> Unit
 ) : RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 
     private val profilePictureList = arrayListOf<ProfileData>()
@@ -44,10 +48,16 @@ private val listener: (profile: ProfileData) -> Unit
         override fun performFiltering(charSequence: CharSequence): FilterResults {
             val filteredList: MutableList<ProfileData> = ArrayList()
             if (charSequence.isEmpty()) {
+                paginationUtil.setLoading(false)
                 filteredList.addAll(completeProfilePictureList)
             } else {
                 for (profile in profilePictureList) {
-                    if (profile.name.toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                    if (profile.name.toLowerCase(Locale.ROOT).contains(
+                            charSequence.toString().toLowerCase(
+                                Locale.ROOT
+                            )
+                        )
+                    ) {
                         filteredList.add(profile)
                     }
                 }
