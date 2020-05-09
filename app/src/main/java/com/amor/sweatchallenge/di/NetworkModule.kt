@@ -34,13 +34,6 @@ val NetworkModule = module {
 
     single { createMoshi() }
 
-    single { createUserDataSource(get()) }
-
-    single { createAppDatabase(get()) }
-
-    single { createUserDao(get()) }
-
-    single { createSearchViewUtil(get()) }
 }
 
 fun createOkHttpClient(): OkHttpClient {
@@ -69,40 +62,3 @@ fun createService(retrofit: Retrofit): ApiService {
     return retrofit.create(ApiService::class.java)
 }
 
-fun createHomeMapper(): HomeMapper {
-    return HomeMapper()
-}
-
-fun createHomeClient(apiService: ApiService, mapper: HomeMapper): HomeClient {
-    return HomeClient(apiService, mapper)
-}
-
-fun createHomeRepository(
-    client: HomeClient,
-    userDataSource: UserDataSource,
-    mapper: HomeMapper
-): HomeRepository {
-    return DefaultHomeRepository(client, userDataSource, mapper)
-}
-
-fun createPaginationUtil(): PaginationUtil {
-    return PaginationUtil()
-}
-
-fun createUserDataSource(userDao: UserDao): UserDataSource {
-    return DefaultUserDataSource(userDao)
-}
-
-fun createAppDatabase(context: Context): AppDatabase {
-    return Room.databaseBuilder(context, AppDatabase::class.java, APP_DATABASE_NAME)
-        .fallbackToDestructiveMigration()
-        .build()
-}
-
-fun createUserDao(appDatabase: AppDatabase): UserDao {
-    return appDatabase.userDao()
-}
-
-fun createSearchViewUtil(paginationUtil: PaginationUtil): SearchViewUtil {
-    return SearchViewUtil(paginationUtil)
-}

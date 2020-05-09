@@ -16,10 +16,11 @@ import com.amor.sweatchallenge.util.SearchViewUtil
 import com.amor.sweatchallenge.util.hideKeyboard
 import com.amor.sweatchallenge.util.pagination.CallbackLoadMoreItems
 import com.amor.sweatchallenge.util.pagination.PaginationUtil
+import com.amor.sweatchallenge.util.showSnackBar
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
+class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems, StatusResult {
 
     private val paginationUtil: PaginationUtil by inject()
     private val searchViewUtil: SearchViewUtil by inject()
@@ -61,6 +62,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
         viewModel.showProfilesPictures(paginationUtil.currentPage)
     }
 
+    override fun showViewNoResult() {
+        binding.noResultImage.visibility = View.VISIBLE
+        binding.noResultText.visibility = View.VISIBLE
+    }
+
+    override fun hideViewNoResult() {
+        binding.noResultImage.visibility = View.GONE
+        binding.noResultText.visibility = View.GONE
+    }
+
     private fun addObservers() {
         viewModel.profilePicturesResult.observe(this, Observer (this::handleProfilePictureResult))
         viewModel.userResult.observe(this, Observer (this::handleUserResult))
@@ -73,6 +84,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
             response.data?.let {
                 adapter.addProfileData(it)
             }
+        } else {
+            showSnackBar(R.string.response_error_server)
         }
     }
 
@@ -90,7 +103,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems {
     }
 
     private fun setupAdapter() {
-        adapter = HomeAdapter(paginationUtil, this::clickOnProfile)
+        adapter = HomeAdapter(paginationUtil,this,  this::clickOnProfile)
         val linearLayoutManager = LinearLayoutManager(context)
         binding.profileRecyclerView.layoutManager = linearLayoutManager
         binding.profileRecyclerView.adapter = adapter

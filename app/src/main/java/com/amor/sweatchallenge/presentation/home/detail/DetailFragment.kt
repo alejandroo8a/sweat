@@ -10,6 +10,8 @@ import com.amor.sweatchallenge.R
 
 import com.amor.sweatchallenge.data.ProfileData
 import com.amor.sweatchallenge.databinding.FragmentDetailBinding
+import com.amor.sweatchallenge.util.launchCallPhone
+import com.amor.sweatchallenge.util.launchMap
 import com.amor.sweatchallenge.util.saveContact
 import com.amor.sweatchallenge.util.showSnackBar
 import com.squareup.picasso.Picasso
@@ -60,12 +62,20 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         binding.emailText.text = profileData.email
         binding.phoneText.text = profileData.phone
         binding.locationText.text = profileData.location
-        Picasso.get().load(profileData.largeImage).placeholder(R.drawable.ic_placeholder).into(binding.pictureImage)
+        Picasso.get().load(profileData.largeImage).into(binding.pictureImage)
     }
 
     private fun addListeners() {
         binding.favoriteFab.setOnClickListener {
             handleIsFavorite()
+        }
+
+        binding.callButton.setOnClickListener {
+            launchCallPhone(profileData.phone)
+        }
+
+        binding.locationButton.setOnClickListener {
+            launchMap(profileData.latitude, profileData.longitude)
         }
     }
 

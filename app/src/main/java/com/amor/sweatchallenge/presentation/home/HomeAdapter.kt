@@ -16,6 +16,7 @@ import kotlin.collections.ArrayList
 
 class HomeAdapter(
     private val paginationUtil: PaginationUtil,
+    private val callbackStatusResult: StatusResult,
     private val listener: (profile: ProfileData) -> Unit
 ) : RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 
@@ -47,10 +48,13 @@ class HomeAdapter(
 
         override fun performFiltering(charSequence: CharSequence): FilterResults {
             val filteredList: MutableList<ProfileData> = ArrayList()
-            if (charSequence.isEmpty()) {
+            if (charSequence.isEmpty() ) {
                 paginationUtil.setLoading(false)
                 filteredList.addAll(completeProfilePictureList)
             } else {
+                if(profilePictureList.isEmpty()) {
+                    profilePictureList.addAll(completeProfilePictureList)
+                }
                 for (profile in profilePictureList) {
                     if (profile.name.toLowerCase(Locale.ROOT).contains(
                             charSequence.toString().toLowerCase(
@@ -74,6 +78,11 @@ class HomeAdapter(
         ) {
             profilePictureList.clear()
             profilePictureList.addAll(filterResults.values as Collection<ProfileData>)
+            if (profilePictureList.size == 0) {
+                callbackStatusResult.showViewNoResult()
+            } else {
+                callbackStatusResult.hideViewNoResult()
+            }
             notifyDataSetChanged()
         }
     }

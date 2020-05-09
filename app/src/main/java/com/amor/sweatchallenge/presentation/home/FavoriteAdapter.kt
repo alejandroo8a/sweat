@@ -35,7 +35,7 @@ class FavoriteAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(profileData: ProfileData, listener: (profile: ProfileData) -> Unit) = with(itemView) {
-            Picasso.get().load(profileData.thumbnail).placeholder(R.drawable.ic_placeholder).into(profilePicture)
+            Picasso.get().load(profileData.largeImage).placeholder(R.drawable.ic_placeholder).into(profilePicture)
             titleText.text = profileData.name
             setOnClickListener { listener(profileData) }
         }
