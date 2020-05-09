@@ -39,7 +39,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems, St
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-        observerNetworkStatus()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,6 +82,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems, St
     private fun handleProfilePictureResult(response: GenericData<ArrayList<ProfileData>>) {
         binding.progressBar.visibility = View.GONE
         paginationUtil.setLoading(false)
+        observerNetworkStatus()
         if(response.isSuccessful) {
             response.data?.let {
                 adapter.addProfileData(it)
