@@ -6,6 +6,7 @@ import com.amor.sweatchallenge.data.home.HomeRepository
 import com.amor.sweatchallenge.database.user.UserDataSource
 import com.amor.sweatchallenge.network.ApiService
 import com.amor.sweatchallenge.network.home.HomeClient
+import com.amor.sweatchallenge.util.NetworkUtil
 import com.amor.sweatchallenge.util.SearchViewUtil
 import com.amor.sweatchallenge.util.pagination.PaginationUtil
 import org.koin.android.ext.koin.androidContext
@@ -20,6 +21,8 @@ val ActivityModule = module {
     single { createPaginationUtil() }
 
     single { createSearchViewUtil(get()) }
+
+    single { createNetworkUtil() }
 
 }
 
@@ -46,4 +49,8 @@ fun createPaginationUtil(): PaginationUtil {
 
 fun createSearchViewUtil(paginationUtil: PaginationUtil): SearchViewUtil {
     return SearchViewUtil(paginationUtil)
+}
+
+fun createNetworkUtil(): NetworkUtil {
+    return NetworkUtil()
 }

@@ -12,6 +12,7 @@ import com.amor.sweatchallenge.data.GenericData
 import com.amor.sweatchallenge.data.ProfileData
 import com.amor.sweatchallenge.databinding.FragmentHomeBinding
 import com.amor.sweatchallenge.presentation.MainActivity
+import com.amor.sweatchallenge.util.NetworkUtil
 import com.amor.sweatchallenge.util.SearchViewUtil
 import com.amor.sweatchallenge.util.hideKeyboard
 import com.amor.sweatchallenge.util.pagination.CallbackLoadMoreItems
@@ -24,6 +25,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems, St
 
     private val paginationUtil: PaginationUtil by inject()
     private val searchViewUtil: SearchViewUtil by inject()
+    private val networkUtil: NetworkUtil by inject()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -37,6 +39,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems, St
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
+        observerNetworkStatus()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -138,5 +141,18 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems, St
     private fun hideFavorites() {
         binding.titleText.visibility = View.GONE
         binding.userRecyclerView.visibility = View.GONE
+    }
+
+    private fun observerNetworkStatus() {
+        activity?.apply {
+            networkUtil.observerNetworkStatus(this) {
+                if(adapter.itemCount == 0) {
+                    viewModel.showProfilesPictures(paginationUtil.currentPage)
+                    this.runOnUiThread {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 }
