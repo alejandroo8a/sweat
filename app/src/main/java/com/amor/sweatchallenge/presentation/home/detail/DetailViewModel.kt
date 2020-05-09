@@ -13,19 +13,24 @@ class DetailViewModel internal constructor(
 ) : ViewModel() {
 
     private var userDisposable: Disposable = NoOpDisposable()
+    private val tag = DetailViewModel::class.java.simpleName
 
     fun addFavoriteUser(profileData: ProfileData) {
         userDisposable.dispose()
         userDisposable = homeRepository.saveUser(profileData)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { Log.d("AQUI MERO", "Se guardo el condenado") }
+            .subscribe {
+                Log.d(tag, "User saved")
+            }
     }
 
     fun deleteFavoriteUser(userId: String) {
         userDisposable.dispose()
         userDisposable = homeRepository.deleteUser(userId)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { Log.d("AQUI MERO", "Se borro el condenado") }
+            .subscribe {
+                Log.d(tag, "User delete")
+            }
     }
 
     override fun onCleared() {
