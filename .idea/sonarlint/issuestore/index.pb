@@ -79,3 +79,17 @@ Eapp/src/main/java/com/amor/sweatchallenge/database/user/UserEntity.kt,8/f/8f18
 Napp/src/main/java/com/amor/sweatchallenge/presentation/home/FavoriteAdapter.kt,4/d/4d06d9eb88a8f34aad097ae8b201c9842ec63673
 „
 Tapp/src/main/java/com/amor/sweatchallenge/presentation/home/detail/DetailFragment.kt,2/a/2ab03981149738864423089868b259f398b6b3a0
+|
+Lapp/src/main/java/com/amor/sweatchallenge/presentation/SuggestionProvider.kt,c/4/c4fa3ba9acd2d8e79b1a1b79277557ad2328a68a
+t
+Dapp/src/main/java/com/amor/sweatchallenge/util/FragmentExtensions.kt,4/4/447391d126b48a08b3dbafe76a76b9874fc0d367
+n
+>app/src/main/java/com/amor/sweatchallenge/di/DatabaseModule.kt,3/9/39ce425f1aa44efd33a9c3efd23985ab5427b87e
+o
+?app/src/main/java/com/amor/sweatchallenge/di/ViewModelModule.kt,6/e/6e3023aa255c49545e11949976f1f68f7d04299c
+{
+Kapp/src/main/java/com/amor/sweatchallenge/presentation/home/StatusResult.kt,4/0/403995c2ba1c6e536ce1e97eb7f28c5a249d7403
+p
+@app/src/main/java/com/amor/sweatchallenge/util/SearchViewUtil.kt,6/4/64e86c2b9bc2c5c9cac75dee1b7362527ab3d470
+m
+=app/src/main/java/com/amor/sweatchallenge/util/NetworkUtil.kt,c/c/cc6154b8e60d3c247c34ec99bdfc75d76c0e0ab8

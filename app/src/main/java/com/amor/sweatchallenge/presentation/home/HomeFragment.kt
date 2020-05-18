@@ -31,9 +31,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), CallbackLoadMoreItems, St
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModel()
 
-    lateinit var adapter: HomeAdapter
-    lateinit var favoriteAdapter: FavoriteAdapter
-    var isSetupFavoriteAdapter = false
+    private lateinit var adapter: HomeAdapter
+    private lateinit var favoriteAdapter: FavoriteAdapter
+    private var isSetupFavoriteAdapter = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
