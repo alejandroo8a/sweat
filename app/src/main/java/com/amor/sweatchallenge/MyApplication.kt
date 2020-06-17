@@ -1,6 +1,14 @@
 package com.amor.sweatchallenge
 
 import android.app.Application
+import androidx.multidex.MultiDex
+import com.amor.sweatchallenge.di.ActivityModule
+import com.amor.sweatchallenge.di.DatabaseModule
+import com.amor.sweatchallenge.di.NetworkModule
+import com.amor.sweatchallenge.di.ViewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class MyApplication : Application(){
 
@@ -11,10 +19,10 @@ class MyApplication : Application(){
         MultiDex.install(this)
 
         // Start Koin
-        startKoin{
+        startKoin {
             androidLogger()
             androidContext(this@MyApplication)
-            modules(listOf(ActivityModule, NetworkModule))
+            modules(listOf(ActivityModule, ViewModelModule, NetworkModule, DatabaseModule))
         }
     }
 
