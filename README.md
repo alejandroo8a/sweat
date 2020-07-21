@@ -9,3 +9,4 @@ I implemented:
 * View binding
 * Pagination
 * Room
+* RxJava
